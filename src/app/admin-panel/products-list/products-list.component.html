@@ -6,7 +6,8 @@
                     <h2>Products</h2>
                 </div>
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-info add-new"><i class="bi bi-plus"></i> Add New</button>
+                    <button (click)="addEntry()" [disabled]="newEntry" type="button" class="btn btn-info add-new"><i
+                            class="bi bi-plus"></i> Add New</button>
                 </div>
             </div>
         </div>
@@ -20,48 +21,49 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Iphone 15 Pro Max</td>
-                    <td>1500</td>
-                    <td><img src="https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-pro-max.jpg" alt=""></td>
-                    <td>
-                        <a class="edit" title="" data-toggle="tooltip" data-original-title="Edit"><i
-                                class="bi bi-pencil"></i></a>
-                        <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
-                                class="bi bi-trash3"></i></a>
-                    </td>
+                <tr *ngFor="let product of products">
+                    <ng-container *ngIf="editID != product['id']; else edit">
+                        <td>{{product['name']}}</td>
+                        <td>{{product['price']}}</td>
+                        <td><img [src]="product['imageURL']" alt=""></td>
+                        <td>
+                            <a class="edit" title="" data-toggle="tooltip" data-original-title="Edit"><i
+                                    (click)="onEdit(product['id']!)" class="bi bi-pencil"></i></a>
+                            <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
+                                    (click)="onDelete(product['id']!)" class="bi bi-trash3"></i></a>
+                        </td>
+                    </ng-container>
+
+                    <ng-template ngForm #editedProduct="ngForm" #edit>
+                        <td><input type="text" class="form-control" name="productName" id="productName"
+                                [ngModel]="product['name']" required></td>
+                        <td><input type="text" class="form-control" name="productPrice" id="productPrice"
+                                [ngModel]="product['price']" required></td>
+                        <td><input type="text" placeholder="Enter Image URL" class="form-control" name="productImageURL"
+                                id="productImageURL" [ngModel]="product['imageURL']" required></td>
+                        <td>
+                            <a class="add" title="" data-toggle="tooltip" data-original-title="Add"
+                                style="display: inline;"><i (click)="onUpdate(editedProduct)"
+                                    [ngClass]="editedProduct.invalid ? 'disabled-cursor' : null"
+                                    class="bi bi-check-circle-fill"></i></a>
+                            <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
+                                    (click)="cancelEntry()" class="bi bi-x-circle-fill"></i></a>
+                        </td>
+                    </ng-template>
                 </tr>
-                <tr>
-                    <td>Iphone 15 Pro Max</td>
-                    <td>1500</td>
-                    <td><img src="https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-pro-max.jpg" alt=""></td>
-                    <td>
-                        <a class="edit" title="" data-toggle="tooltip" data-original-title="Edit"><i
-                                class="bi bi-pencil"></i></a>
-                        <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
-                                class="bi bi-trash3"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Iphone 15 Pro Max</td>
-                    <td>1500</td>
-                    <td><img src="https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-pro-max.jpg" alt=""></td>
-                    <td>
-                        <a class="edit" title="" data-toggle="tooltip" data-original-title="Edit"><i
-                                class="bi bi-pencil"></i></a>
-                        <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
-                                class="bi bi-trash3"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="form-control" name="name" id="name"></td>
-                    <td><input type="text" class="form-control" name="price" id="price"></td>
-                    <td><input type="file" class="form-control form-control-sm" name="image" id="image"></td>
+
+                <tr *ngIf="newEntry" ngForm #productInfo="ngForm">
+                    <td><input type="text" class="form-control" name="name" id="name" ngModel required></td>
+                    <td><input type="text" class="form-control" name="price" id="price" ngModel required></td>
+                    <td><input type="text" placeholder="Enter Image URL" class="form-control" name="imageURL"
+                            id="imageURL" ngModel required></td>
                     <td>
                         <a class="add" title="" data-toggle="tooltip" data-original-title="Add"
-                            style="display: inline;"><i class="bi bi-plus-circle-fill"></i></a>
+                            style="display: inline;"><i (click)="addProduct()"
+                                [ngClass]="productInfo.invalid ? 'disabled-cursor' : null"
+                                class="bi bi-plus-circle-fill"></i></a>
                         <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
-                                class="bi bi-trash3"></i></a>
+                                (click)="cancelEntry()" class="bi bi-trash3"></i></a>
                     </td>
                 </tr>
             </tbody>

@@ -2,6 +2,10 @@ img {
     width: 50px;
 }
 
-table.table .form-control {
-    height: auto;
+.disabled-cursor {
+    cursor: not-allowed;
+}
+
+.disabled-cursor:active {
+    pointer-events: none;
 }
