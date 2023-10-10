@@ -13,6 +13,7 @@ import { AdminNavComponent } from './admin-panel/admin-nav/admin-nav.component';
 import { ProductsListComponent } from './admin-panel/products-list/products-list.component';
 import { UsersComponent } from './admin-panel/users/users.component';
 import { AdminsComponent } from './admin-panel/admins/admins.component';
+import { CartComponent } from './cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AdminsComponent } from './admin-panel/admins/admins.component';
     AdminNavComponent,
     ProductsListComponent,
     UsersComponent,
-    AdminsComponent
+    AdminsComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,

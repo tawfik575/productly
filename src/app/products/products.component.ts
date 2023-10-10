@@ -9,14 +9,21 @@ import { BackendService } from '../backend.service';
 })
 export class ProductsComponent implements OnInit {
   products: Product[] = [];
+  loadSpinner: boolean = true;
+
   constructor(private backendService: BackendService) { }
 
   ngOnInit() {
-    this.backendService.fetchProducts();
+    this.backendService.fetchProducts("products");
     this.backendService.getProducts().subscribe({
       next: (data) => {
         this.products = data;
+        this.loadSpinner = false;
       }
     });
+  }
+
+  clickCart(product: Product) {
+    this.backendService.addProduct(product, "cart")
   }
 }

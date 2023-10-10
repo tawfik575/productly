@@ -1,0 +1,85 @@
+<div class="container px-3 my-5 clearfix">
+    <div class="card">
+        <div class="card-header">
+            <h2>Shopping Cart</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered m-0">
+                    <thead>
+                        <tr>
+                            <th class="text-center py-3 px-4" style="width: 300px;">Product Name &amp; Details</th>
+                            <th class="text-center py-3 px-4" style="width: 100px;">Quantity</th>
+                            <th class="text-center py-3 px-4" style="width: 100px;">Price</th>
+                            <th class="text-center py-3 px-0" style="width: 70px;">Remove</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let product of products">
+                            <td class="p-4">
+                                <div class="media align-items-center">
+                                    <img [src]="product['imageURL']" class="d-block ui-w-40 ui-bordered mr-4" alt="">
+                                    <div class="media-body mt-2">
+                                        <a href="#" class="d-block text-dark">{{product['name']}}</a>
+                                        <small>
+                                            <span class="text-muted">Color: </span>
+                                            <span class="ui-product-color ui-product-color-sm align-text-bottom"
+                                                style="background:#0F0F0F;"></span> &nbsp;
+                                            <span class="text-muted">Ships from: </span> China
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle p-4">
+                                <select (change)="onValueChange($event, product['id']!)"
+                                    class="form-select text-center">
+                                    <option *ngFor="let quantity of quantities" [value]="quantity">{{quantity}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td class="text-end font-weight-semibold align-middle p-4">${{product['price']}}</td>
+                            <td class="text-center align-middle px-0"><i (click)="removeProduct(product['id']!)"
+                                    class="bi bi-x-circle-fill text-danger"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="loadSpinner; else addProduct" class="d-flex justify-content-center text-primary mt-5">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+
+            <ng-template #addProduct>
+                <p class="text-center text-danger mt-5">Add products to the cart!</p>
+            </ng-template>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
+                <div class="d-flex">
+                    <div class="mt-5">
+                        <label class="text-muted font-weight-normal">Voucher Code</label>
+                        <input type="text" value="happy15" disabled class="form-control">
+                    </div>
+                    <div class="m-5">
+                        <label class="text-muted font-weight-normal">Discount</label>
+                        <div class="text-center"><strong>${{products.length > 0 ? 15: 0}}</strong></div>
+                    </div>
+                </div>
+                <div class="d-flex text-end">
+                    <div>
+                        <label class="text-muted font-weight-normal">Total Amount</label>
+                        <div class="text-large"><strong>${{totalAmount}}</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Back to shopping</button>
+                <button type="button" class="btn btn-lg btn-primary mt-2">Checkout</button>
+            </div>
+        </div>
+    </div>
+</div>

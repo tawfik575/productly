@@ -17,7 +17,7 @@ export class ProductsListComponent implements OnInit {
   constructor(private backendService: BackendService) { }
 
   ngOnInit() {
-    this.backendService.fetchProducts();
+    this.backendService.fetchProducts("products");
     this.backendService.getProducts().subscribe({
       next: (data) => {
         this.products = data;
@@ -46,11 +46,11 @@ export class ProductsListComponent implements OnInit {
     }
 
     this.newEntry = false;
-    this.backendService.addProducts(product);
+    this.backendService.addProduct(product, "products");
   }
 
   onDelete(id: string) {
-    this.backendService.deleteProduct(id);
+    this.backendService.deleteProduct(id, "products");
   }
 
   onUpdate(editedProduct: NgForm) {
