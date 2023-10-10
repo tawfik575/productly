@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { Product } from 'src/app/products/product';
+import { Product } from 'src/app/users-section/products/product';
 import { NgForm } from '@angular/forms';
 import { BackendService } from '../../backend.service';
 
@@ -12,6 +12,7 @@ export class ProductsListComponent implements OnInit {
   editID: string = "";
   products: Product[] = [];
   newEntry: boolean = false;
+  loadSpinner: boolean = true;
   @ViewChild('productInfo') productInfo!: NgForm;
 
   constructor(private backendService: BackendService) { }
@@ -21,6 +22,7 @@ export class ProductsListComponent implements OnInit {
     this.backendService.getProducts().subscribe({
       next: (data) => {
         this.products = data;
+        this.loadSpinner = false;
       }
     });
   }

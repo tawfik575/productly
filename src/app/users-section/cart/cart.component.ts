@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../products/product';
-import { BackendService } from '../backend.service';
+import { BackendService } from '../../backend.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -15,7 +16,7 @@ export class CartComponent implements OnInit {
   loadSpinner: boolean = true;
   quantities: number[] = [1, 2, 3, 4, 5];
 
-  constructor(private backendService: BackendService) { }
+  constructor(private backendService: BackendService, private router: Router) { }
 
   ngOnInit() {
     this.backendService.fetchProducts("cart");
@@ -46,7 +47,7 @@ export class CartComponent implements OnInit {
       amount += product.price;
     }
 
-    this.totalAmount = amount - this.discount;
+    this.totalAmount = +(amount - this.discount).toFixed(2);
 
     if (this.totalAmount < 0) {
       this.totalAmount = 0;
@@ -60,7 +61,7 @@ export class CartComponent implements OnInit {
       return product.id == id;
     });
 
-    this.products[indx].price = this.basePrices[indx] * quantity;
+    this.products[indx].price = +(this.basePrices[indx] * quantity).toFixed(2);
     this.calculateTotalAmount();
   }
 
@@ -73,5 +74,9 @@ export class CartComponent implements OnInit {
 
     this.products.splice(indx, 1);
     this.basePrices.splice(indx, 1);
+  }
+
+  onClick() {
+    this.router.navigate(['']);
   }
 }

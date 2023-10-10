@@ -6,8 +6,8 @@
                     <h2>Products</h2>
                 </div>
                 <div class="col-sm-4">
-                    <button (click)="addEntry()" [disabled]="newEntry" type="button" class="btn btn-info add-new"><i
-                            class="bi bi-plus"></i> Add New</button>
+                    <button (click)="addEntry()" [disabled]="newEntry || loadSpinner" type="button"
+                        class="btn btn-info add-new"><i class="bi bi-plus"></i> Add New</button>
                 </div>
             </div>
         </div>
@@ -21,6 +21,21 @@
                 </tr>
             </thead>
             <tbody>
+                <tr *ngIf="newEntry" ngForm #productInfo="ngForm">
+                    <td><input type="text" class="form-control" name="name" id="name" ngModel required></td>
+                    <td><input type="text" class="form-control" name="price" id="price" ngModel required></td>
+                    <td><input type="text" placeholder="Enter Image URL" class="form-control" name="imageURL"
+                            id="imageURL" ngModel required></td>
+                    <td>
+                        <a class="add" title="" data-toggle="tooltip" data-original-title="Add"
+                            style="display: inline;"><i (click)="addProduct()"
+                                [ngClass]="productInfo.invalid ? 'disabled-cursor' : null"
+                                class="bi bi-plus-circle-fill"></i></a>
+                        <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
+                                (click)="cancelEntry()" class="bi bi-trash3"></i></a>
+                    </td>
+                </tr>
+
                 <tr *ngFor="let product of products">
                     <ng-container *ngIf="editID != product['id']; else edit">
                         <td>{{product['name']}}</td>
@@ -51,22 +66,13 @@
                         </td>
                     </ng-template>
                 </tr>
-
-                <tr *ngIf="newEntry" ngForm #productInfo="ngForm">
-                    <td><input type="text" class="form-control" name="name" id="name" ngModel required></td>
-                    <td><input type="text" class="form-control" name="price" id="price" ngModel required></td>
-                    <td><input type="text" placeholder="Enter Image URL" class="form-control" name="imageURL"
-                            id="imageURL" ngModel required></td>
-                    <td>
-                        <a class="add" title="" data-toggle="tooltip" data-original-title="Add"
-                            style="display: inline;"><i (click)="addProduct()"
-                                [ngClass]="productInfo.invalid ? 'disabled-cursor' : null"
-                                class="bi bi-plus-circle-fill"></i></a>
-                        <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
-                                (click)="cancelEntry()" class="bi bi-trash3"></i></a>
-                    </td>
-                </tr>
             </tbody>
         </table>
+    </div>
+
+    <div *ngIf="loadSpinner" class="d-flex justify-content-center text-primary mt-5">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
 </div>

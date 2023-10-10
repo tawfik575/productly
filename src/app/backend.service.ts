@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Product } from './products/product';
+import { Product } from './users-section/products/product';
 import { HttpClient } from '@angular/common/http';
 import { Subject, map } from 'rxjs';
 
