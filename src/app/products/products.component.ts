@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from './product';
-import { AdminPanelService } from '../admin-panel/admin-panel.service';
+import { BackendService } from '../backend.service';
 
 @Component({
   selector: 'app-products',
@@ -9,11 +9,11 @@ import { AdminPanelService } from '../admin-panel/admin-panel.service';
 })
 export class ProductsComponent implements OnInit {
   products: Product[] = [];
-  constructor(private adminPanelService: AdminPanelService) { }
+  constructor(private backendService: BackendService) { }
 
   ngOnInit() {
-    this.adminPanelService.fetchProducts();
-    this.adminPanelService.getProducts().subscribe({
+    this.backendService.fetchProducts();
+    this.backendService.getProducts().subscribe({
       next: (data) => {
         this.products = data;
       }

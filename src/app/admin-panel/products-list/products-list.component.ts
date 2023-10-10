@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { Product } from 'src/app/products/product';
 import { NgForm } from '@angular/forms';
-import { AdminPanelService } from '../admin-panel.service';
+import { BackendService } from '../../backend.service';
 
 @Component({
   selector: 'app-products-list',
@@ -14,11 +14,11 @@ export class ProductsListComponent implements OnInit {
   newEntry: boolean = false;
   @ViewChild('productInfo') productInfo!: NgForm;
 
-  constructor(private adminPanelService: AdminPanelService) { }
+  constructor(private backendService: BackendService) { }
 
   ngOnInit() {
-    this.adminPanelService.fetchProducts();
-    this.adminPanelService.getProducts().subscribe({
+    this.backendService.fetchProducts();
+    this.backendService.getProducts().subscribe({
       next: (data) => {
         this.products = data;
       }
@@ -46,11 +46,11 @@ export class ProductsListComponent implements OnInit {
     }
 
     this.newEntry = false;
-    this.adminPanelService.addProducts(product);
+    this.backendService.addProducts(product);
   }
 
   onDelete(id: string) {
-    this.adminPanelService.deleteProduct(id);
+    this.backendService.deleteProduct(id);
   }
 
   onUpdate(editedProduct: NgForm) {
@@ -62,6 +62,6 @@ export class ProductsListComponent implements OnInit {
     }
 
     this.editID = "";
-    this.adminPanelService.updateProduct(product);
+    this.backendService.updateProduct(product);
   }
 }
