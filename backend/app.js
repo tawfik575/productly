@@ -1,11 +1,14 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import Product from './models/product.js'
 
+dotenv.config();
 const app = express();
-const dbPassword = "KBAxFw7fGQdk56Zd";
+
 let currentDb, currentDbConnection = false;
+const dbPassword = `${process.env.DB_PASSWORD}`;
 
 app.use(bodyParser.json());
 app.use(
