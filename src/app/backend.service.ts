@@ -16,7 +16,7 @@ export class BackendService {
   constructor(private http: HttpClient) { };
 
   fetchProducts(dest: string) {
-    this.http.get<{ products: any[], message: string }>(`http://localhost:5000/api/${dest}`)
+    this.http.get<{ products: any[], message: string }>(`https://productly-server.vercel.app/api/${dest}`)
       .pipe(map(data => {
         return data.products.map(entry => {
           return {
@@ -40,7 +40,7 @@ export class BackendService {
   }
 
   addProduct(product: Product, dest: string) {
-    this.http.post<{ statusId: number, message: string }>(`http://localhost:5000/api/${dest}`, product).subscribe({
+    this.http.post<{ statusId: number, message: string }>(`https://productly-server.vercel.app/api/${dest}`, product).subscribe({
       next: (submittedData) => {
         if (dest == "products") {
           this.products.push(product);
@@ -56,7 +56,7 @@ export class BackendService {
   }
 
   deleteProduct(productId: string, dest: string) {
-    this.http.delete<{ message: string }>(`http://localhost:5000/api/${dest}/` + productId).subscribe({
+    this.http.delete<{ message: string }>(`https://productly-server.vercel.app/api/${dest}/` + productId).subscribe({
       next: () => {
         const filteredProducts = this.products.filter(product => product.id != productId);
         this.updatedProducts.next([...filteredProducts]);
@@ -68,7 +68,7 @@ export class BackendService {
   }
 
   updateProduct(product: Product) {
-    this.http.put<{ message: string }>('http://localhost:5000/api/products/' + product.id, product).subscribe({
+    this.http.put<{ message: string }>('https://productly-server.vercel.app/api/products/' + product.id, product).subscribe({
       next: () => {
         const indx = this.products.findIndex(data => {
           return product.id == data.id;
