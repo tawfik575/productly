@@ -1,8 +1,8 @@
-import dotenv from 'dotenv';
-import express from 'express';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
-import Product from './models/product.js'
+const dotenv = require('dotenv');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const Product = require('./models/product.js');
 
 dotenv.config();
 const app = express();
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 
 app.use("/api/:dest", async (req, res, next) => {
     const database = req.params.dest == "cart" ? "cart-data" : "products-data";
-    const dbURL = `mongodb+srv://admin:${dbPassword}@cluster1.rrag3xw.mongodb.net/${database}?retryWrites=true&w=majority`;
+    const dbURL = `mongodb+srv://admin2:${dbPassword}@cluster1.rrag3xw.mongodb.net/${database}?retryWrites=true&w=majority`;
 
     if (currentDbConnection) {
         await mongoose.disconnect()
@@ -103,4 +103,4 @@ app.put("/api/products/:id", (req, res, next) => {
     });
 });
 
-export default app;
+module.exports = app;
