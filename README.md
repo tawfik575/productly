@@ -1,9 +1,9 @@
 # Productly
 
-Productly is an ecommerce website for a personal business where the seller will be able to sell his products locally and globally. It will help the seller to expand his business beyond borders and make more profits. This website is built using MEAN stack and it is still in the development phase.
+Productly is an e-commerce website for a personal business where the seller will be able to sell his products locally and globally. It will help the seller to expand his business beyond borders and make more profits. This website is built using the MEAN stack and it is still in the development phase.
 
-Live link:   
-Admin panel: 
+Live link: https://productly-one.vercel.app/  
+Admin panel: https://productly-one.vercel.app/admin
 
 ## Technologies Used
 
