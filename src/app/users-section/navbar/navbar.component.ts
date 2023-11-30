@@ -11,6 +11,7 @@ export class NavbarComponent implements OnInit {
   constructor(private backendService: BackendService) { }
 
   ngOnInit() {
+    this.backendService.fetchProducts("cart");
     this.backendService.cartProductsCount.subscribe({
       next: (len) => {
         this.cartItems = len;

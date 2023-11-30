@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Product } from './users-section/products/product';
-import { HttpClient } from '@angular/common/http';
 import { Subject, map } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Product } from './users-section/products/product';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +30,12 @@ export class BackendService {
       .subscribe({
         next: (productData) => {
           this.products = productData;
+
+          if (dest == "cart") {
+            this.countProducts = this.products.length;
+            this.cartProductsCount.next(this.countProducts);
+          }
+
           this.updatedProducts.next([...this.products]);
         }
       });
@@ -58,8 +64,8 @@ export class BackendService {
   deleteProduct(productId: string, dest: string) {
     this.http.delete<{ message: string }>(`https://productly-server.vercel.app/api/${dest}/` + productId).subscribe({
       next: () => {
-        const filteredProducts = this.products.filter(product => product.id != productId);
-        this.updatedProducts.next([...filteredProducts]);
+        this.products = this.products.filter(product => product.id != productId);
+        this.updatedProducts.next([...this.products]);
 
         this.countProducts--;
         this.cartProductsCount.next(this.countProducts);

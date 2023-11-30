@@ -6,4 +6,4 @@ const productSchema = mongoose.Schema({
     imageURL: { type: String, required: true },
 });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = productSchema;

@@ -2,13 +2,19 @@ const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const Product = require('./models/product.js');
+const productSchema = require('./models/product.js');
 
 dotenv.config();
 const app = express();
 
-let currentDb, currentDbConnection = false;
+let dbModel;
+const dbUser = `${process.env.DB_USER}`;
 const dbPassword = `${process.env.DB_PASSWORD}`;
+
+const cartDB = mongoose.createConnection(`mongodb+srv://${dbUser}:${dbPassword}@cluster1.rrag3xw.mongodb.net/cart-data?retryWrites=true&w=majority`);
+const productsDB = mongoose.createConnection(`mongodb+srv://${dbUser}:${dbPassword}@cluster1.rrag3xw.mongodb.net/products-data?retryWrites=true&w=majority`);
+const Cart = cartDB.model("products", productSchema);
+const Product = productsDB.model("products", productSchema)
 
 app.use(bodyParser.json());
 app.use(
@@ -24,35 +30,13 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use("/api/:dest", async (req, res, next) => {
-    const database = req.params.dest == "cart" ? "cart-data" : "products-data";
-    const dbURL = `mongodb+srv://admin2:${dbPassword}@cluster1.rrag3xw.mongodb.net/${database}?retryWrites=true&w=majority`;
-
-    if (currentDbConnection) {
-        await mongoose.disconnect()
-            .then(() => {
-                console.log(`Disconnected from the ${currentDb} database!`);
-            })
-            .catch((error) => {
-                console.error("Disconnection failed!", error);
-            });
-    }
-
-    await mongoose.connect(dbURL)
-        .then(() => {
-            currentDb = database;
-            currentDbConnection = true;
-            console.log(`Connected to the ${currentDb} database!`);
-        })
-        .catch(() => {
-            console.log(`Connection failed to the ${database} database!`);
-        });
-
+app.use("/api/:dest", (req, res, next) => {
+    dbModel = req.params.dest == "cart" ? Cart : Product;
     next();
 });
 
 app.get("/api/:dest", (req, res, next) => {
-    Product.find().then(documents => {
+    dbModel.find().then(documents => {
         res.json({
             products: documents,
             message: "Products have been fetched successfully!"
@@ -61,18 +45,19 @@ app.get("/api/:dest", (req, res, next) => {
 });
 
 app.post("/api/:dest", (req, res, next) => {
-    const product = new Product({
+    const product = {
         name: req.body.name,
         price: req.body.price,
         imageURL: req.body.imageURL
-    });
+    };
 
-    product.save().then(() => {
+    dbModel.create(product).then(() => {
         res.json({
             statusId: 201,
             message: "Product has been added successfully!"
         });
     }).catch((error) => {
+        console.log(error)
         res.json({
             statusId: 400,
             message: "An error has occurred!"
@@ -80,8 +65,8 @@ app.post("/api/:dest", (req, res, next) => {
     });
 });
 
-app.delete("/api/:dest/:id", (req, res, next) => {
-    Product.deleteOne({ _id: req.params.id }).then(() => {
+app.delete("/api/:dest/:id", async(req, res, next) => {
+    await dbModel.deleteOne({ _id: req.params.id }).then(() => {
         res.status(200).json({
             message: "Product has been deleted successfully!"
         });
@@ -89,14 +74,14 @@ app.delete("/api/:dest/:id", (req, res, next) => {
 });
 
 app.put("/api/products/:id", (req, res, next) => {
-    const product = new Product({
+    const product = {
         _id: req.body.id,
         name: req.body.name,
         price: req.body.price,
         imageURL: req.body.imageURL
-    });
+    };
 
-    Product.updateOne({ _id: req.params.id }, product).then(() => {
+    dbModel.updateOne({ _id: req.params.id }, product).then(() => {
         res.status(200).json({
             message: "Product has been updated successfully!"
         });
