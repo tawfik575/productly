@@ -7,13 +7,13 @@ i:hover {
     cursor: pointer;
 }
 
+.card {
+    box-shadow: 0 1px 15px 1px rgba(52, 40, 104, .08);
+}
+
 .ui-w-40 {
     width: 40px !important;
     height: auto;
-}
-
-.card {
-    box-shadow: 0 1px 15px 1px rgba(52, 40, 104, .08);
 }
 
 .ui-product-color {
